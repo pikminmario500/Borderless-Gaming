@@ -1457,8 +1457,10 @@ namespace BorderlessGaming.Logic.Models {
     [global::System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     internal static int __EncodeInto(global::BorderlessGaming.Logic.Models.Favorite record, ref global::Bebop.Runtime.BebopWriter writer) {
       var before = writer.Length;
-      writer.WriteByte(System.Runtime.CompilerServices.Unsafe.As<global::BorderlessGaming.Logic.Models.FavoriteType, byte>(ref System.Runtime.CompilerServices.Unsafe.AsRef(record.Type)));
-      writer.WriteByte(System.Runtime.CompilerServices.Unsafe.As<global::BorderlessGaming.Logic.Models.FavoriteSize, byte>(ref System.Runtime.CompilerServices.Unsafe.AsRef(record.Size)));
+#pragma warning disable CS9193
+            writer.WriteByte(System.Runtime.CompilerServices.Unsafe.As<global::BorderlessGaming.Logic.Models.FavoriteType, byte>(ref System.Runtime.CompilerServices.Unsafe.AsRef(record.Type)));
+            writer.WriteByte(System.Runtime.CompilerServices.Unsafe.As<global::BorderlessGaming.Logic.Models.FavoriteSize, byte>(ref System.Runtime.CompilerServices.Unsafe.AsRef(record.Size)));
+#pragma warning restore CS9193
       writer.WriteString(record.SearchText);
       global::BorderlessGaming.Logic.Models.ProcessRectangle.__EncodeInto(record.Screen, ref writer);
       writer.WriteInt32(record.OffsetLeft);
@@ -1488,9 +1490,11 @@ namespace BorderlessGaming.Logic.Models {
     internal static global::BorderlessGaming.Logic.Models.Favorite __DecodeFrom(ref global::Bebop.Runtime.BebopReader reader) {
 
       global::BorderlessGaming.Logic.Models.FavoriteType field0;
+#pragma warning disable CS9193
       field0 = System.Runtime.CompilerServices.Unsafe.As<byte, global::BorderlessGaming.Logic.Models.FavoriteType>(ref System.Runtime.CompilerServices.Unsafe.AsRef(reader.ReadByte()));
       global::BorderlessGaming.Logic.Models.FavoriteSize field1;
       field1 = System.Runtime.CompilerServices.Unsafe.As<byte, global::BorderlessGaming.Logic.Models.FavoriteSize>(ref System.Runtime.CompilerServices.Unsafe.AsRef(reader.ReadByte()));
+#pragma warning restore CS9193
       string field2;
       field2 = reader.ReadString();
       global::BorderlessGaming.Logic.Models.ProcessRectangle field3;

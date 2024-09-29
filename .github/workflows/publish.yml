@@ -74,7 +74,8 @@ jobs:
           draft: false
           make_latest: true
           files: |
-            BorderlessGaming-${{ env.shortcommithash }}.exe
+            BorderlessGaming-${{ env.shortcommithash }}-Release.exe
+            BorderlessGaming-${{ env.shortcommithash }}-Debug.exe
           name: Build ${{ env.shortcommithash }}
           tag_name: ${{ env.shortcommithash }}
           generate_release_notes: true

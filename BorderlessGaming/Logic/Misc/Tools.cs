@@ -82,7 +82,9 @@ namespace BorderlessGaming.Logic.Misc
             var versionUrl = "https://raw.githubusercontent.com/Codeusa/Borderless-Gaming/master/version.xml";
             var elementName = string.Empty;
             var releasePageUrl = string.Empty;
+#pragma warning disable CS8632
             Version? newVersion = null;
+#pragma warning restore CS8632
             try
             {
                 using var cts = new System.Threading.CancellationTokenSource();
