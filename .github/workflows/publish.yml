@@ -5,6 +5,10 @@ on: [push, pull_request]
 
 jobs:
   build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
     runs-on: windows-latest
 
     steps:
@@ -18,18 +22,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore
-
       - name: Publish
-        run: dotnet publish -c Release -r win-x64
+        run: dotnet publish -c ${{ matrix.configuration }} -r win-x64
 
       - name: Upload artifact
         uses: actions/upload-artifact@main
         with:
-          name: installer
+          name: Borderless-Gaming (${{ matrix.configuration }})
           path: |
-            ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
+            .\BorderlessGaming\bin\${{ matrix.configuration }}\net8.0-windows\win-x64\publish\*
 
   release:
     needs: build
@@ -42,15 +43,22 @@ jobs:
         run: |
           echo "shortcommithash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-      - name: Download x64 artifact
+      - name: Download x64 release artifact
         uses: actions/download-artifact@main
         with:
-          name: installer
-          path: Release
+          name: Borderless-Gaming (Release)
+          path: x64-Release
+
+      - name: Download x64 debug artifact
+        uses: actions/download-artifact@main
+        with:
+          name: Borderless-Gaming (Debug)
+          path: x64-Debug
 
       - name: Rename artifacts
         run: |
-          mv Release/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe BorderlessGaming-${{ env.shortcommithash }}.exe
+          mv x64-Release/BorderlessGaming.exe BorderlessGaming-${{ env.shortcommithash }}-Release.exe
+          mv x64-Debug/BorderlessGaming.exe BorderlessGaming-${{ env.shortcommithash }}-Debug.exe
 
       - name: Delete old release
         uses: dev-drprasad/delete-older-releases@master
