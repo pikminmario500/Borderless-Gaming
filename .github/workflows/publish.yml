@@ -1,18 +1,14 @@
 name: publish Borderless Gaming
 
 
-on:
-  push:
-    tags:
-      - "*.*.*"
+on: [push, pull_request]
 
 jobs:
-  publish:
-    name: Publish Release
+  build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@main
         with:
             fetch-depth: 0
@@ -20,7 +16,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@main
         with:
-          dotnet-version: "8.0.x" # SDK Version to use; x will use the latest version of the 7.0 channel
+          dotnet-version: '8.0.x'
 
       - name: Install bebopc
         shell: pwsh
@@ -34,26 +30,45 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: installer
-          path: ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
+          path: |
+            ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@main
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Get short version of commit hash
+        run: |
+          echo "shortcommithash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Download x64 artifact
+        uses: actions/download-artifact@main
+        with:
+          name: installer
+          path: Release
+
+      - name: Rename artifacts
+        run: |
+          mv Release/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe BorderlessGaming-${{ env.shortcommithash }}.exe
+
+      - name: Delete old release
+        uses: dev-drprasad/delete-older-releases@master
+        with:
+          keep_latest: 0
+          delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@master
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Borderless Gaming ${{ github.ref }}
           draft: false
-          prerelease: false
-
-      - name: Upload installer
-        uses: actions/upload-release-asset@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
-          asset_name: installer-win64.exe
-          asset_content_type: application/octet-stream
-        
+          make_latest: true
+          files: |
+            BorderlessGaming-${{ env.shortcommithash }}.exe
+          name: Build ${{ env.shortcommithash }}
+          tag_name: ${{ env.shortcommithash }}
+          generate_release_notes: true
