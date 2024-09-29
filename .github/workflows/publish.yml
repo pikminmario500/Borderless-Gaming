@@ -18,13 +18,11 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install bebopc
-        shell: pwsh
-        run: $version = '3.1.2'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
+      - name: Restore dependencies
+        run: dotnet restore
 
-      - name: Build release
-        shell: pwsh
-        run: ./scripts/build-release.ps1
+      - name: Publish
+        run: dotnet publish -c Release -r win-x64
 
       - name: Upload artifact
         uses: actions/upload-artifact@main
