@@ -34,6 +34,7 @@ namespace BorderlessGaming.Logic.Models
             "firefox",
             "chrome",
             "safari",
+            "waterfox",
             // Skip launchers/misc.
             "iw4 console",
             "steam",

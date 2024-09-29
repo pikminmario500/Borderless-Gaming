@@ -183,7 +183,7 @@ namespace BorderlessGaming.Forms
 
         private void toolStripReportBug_Click(object sender, EventArgs e)
         {
-            Tools.GotoSite("https://github.com/Codeusa/Borderless-Gaming/issues");
+            Tools.GotoSite("https://github.com/pikminmario500/Borderless-Gaming/issues");
         }
 
         private void toolStripSupportUs_Click(object sender, EventArgs e)
@@ -746,6 +746,11 @@ fav.PositionX.ToString()), out int favPositionX);
 
             fav.DelayBorderless = toolStripDelayBorderless.Checked;
             RefreshFavoritesList(fav);
+        }
+
+        private void toolStripForceResize_Click(object sender, EventArgs e)
+        {
+            _watcher.ResetMadeBorderless((Favorite) lstFavorites.SelectedItem);
         }
 
         /// <summary>

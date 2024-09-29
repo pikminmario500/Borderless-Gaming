@@ -36,9 +36,9 @@
     <EmbeddedResource Remove="Properties\Resources.zh-CN.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="bebop" Version="2.7.4" />
+    <PackageReference Include="bebop" Version="3.1.2" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="TaskScheduler" Version="2.10.1" />
+    <PackageReference Include="TaskScheduler" Version="2.11.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="../SteamLibs/steam_api64.dll">

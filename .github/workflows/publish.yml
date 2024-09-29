@@ -13,33 +13,32 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
         with:
             fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@main
         with:
           dotnet-version: "8.0.x" # SDK Version to use; x will use the latest version of the 7.0 channel
-          include-prerelease: true
 
       - name: Install bebopc
         shell: pwsh
-        run: $version = '2.7.4'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
+        run: $version = '3.1.2'; $script = irm "https://bebop.sh"; & ([scriptblock]::Create($script)) -bebopcVersion $version
 
       - name: Build release
         shell: pwsh
         run: ./scripts/build-release.ps1
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@main
         with:
           name: installer
           path: ./Installers/BorderlessGaming${{ env.RELEASE_VERSION }}_admin_setup.exe
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -49,7 +48,7 @@ jobs:
           prerelease: false
 
       - name: Upload installer
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
